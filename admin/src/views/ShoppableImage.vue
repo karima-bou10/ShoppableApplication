@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import AddImage from './AddImage.vue';
+import AddImage from '../components/AddImage.vue';
 export default {
   components: {
     AddImage
