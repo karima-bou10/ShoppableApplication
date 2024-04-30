@@ -9,10 +9,6 @@ const router = createRouter({
       component: Dashboard,
       meta: { title: "Dashboard" },
       beforeEnter: (to, from, next) => {
-        // Redirect to the Dashboard page if the root path is accessed
-        if (localStorage.getItem("is_expanded") !== "true") {
-          localStorage.setItem("is_expanded", "true");
-        }
         next();
       },
     },

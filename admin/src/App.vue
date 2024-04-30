@@ -68,30 +68,9 @@ body {
   font-style: normal;
 }
 
-button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
-.app {
-  display: flex;
-
-  main {
-    flex: 1 1 0;
-    padding: 2rem;
-
-    @media (max-width: 1024px) {
-      padding-left: 6rem;
-    }
-  }
-  .main-content {
-    flex: 1; /* Occupy remaining space */
-    padding: 2rem;
-    transition: margin-left 0.2s ease; /* Apply transition to margin-left */
-  }
+.main-content {
+  flex: 1 1 0; /* Occupy remaining space */
+  transition: margin-left 0.2s ease; /* Apply transition to margin-left */
 }
 .router-view {
   margin-top: 80px;

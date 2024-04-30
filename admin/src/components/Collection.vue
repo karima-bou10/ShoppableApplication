@@ -19,7 +19,7 @@
             />
           </div>
 
-          <div class="button-group mt-4 rounded-b-lg flex justify-around">
+          <div class="button-group mt-0 rounded-b-lg flex justify-around">
             <button type="button" class="action-button edit-button">
               <div class="icon-container">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -90,57 +90,15 @@
   </div>
 </template>
 
-<style>
-/* width */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.button-group {
-  padding: 5% 10% 5% 10%;
-  background-color: gainsboro;
-}
-.action-button {
-  width: 1em;
-  height: 1em;
-  padding: 8%;
-  border-radius: 50%;
-  background-color: #476ffe;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mt-4 {
-  margin-top: 0rem;
-  background-color: none;
-}
-.icon-container {
-  height: 15px;
-  margin: 5px auto;
-  display: flex;
-}
-</style>
 <script setup>
 import { ref } from "vue";
 import image from "../assets/shopImage.jpeg";
 
 const selectedImg = ref(null);
+
+const toggleImgInfo = (shopImg) => {
+  selectedImg.value = selectedImg.value === shopImg ? null : shopImg; // Show shopImg info if not already selected && Hide it if already selected
+};
 
 const products = [
   {
@@ -247,8 +205,47 @@ const shopImgs = [
     products: products,
   },
 ];
-
-const toggleImgInfo = (shopImg) => {
-  selectedImg.value = selectedImg.value === shopImg ? null : shopImg; // Show shopImg info if not already selected && Hide it if already selected
-};
 </script>
+
+<style>
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.button-group {
+  padding: 5% 10% 5% 10%;
+  background-color: gainsboro;
+}
+.action-button {
+  width: 1em;
+  height: 1em;
+  padding: 8%;
+  border-radius: 50%;
+  background-color: #476ffe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon-container {
+  height: 15px;
+  margin: 5px auto;
+  display: flex;
+}
+</style>
