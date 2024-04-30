@@ -1,40 +1,14 @@
 <template>
   <div id="app">
-    <Sidebar />
-    <div class="main-content" :style="{ marginLeft: mainContentMargin }">
-      <Header />
-      <div class="router-view">
-        <router-view />
-      </div>
-    </div>
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script>
-import Header from "./components/Header.vue";
-import Sidebar from "./components/Sidebar.vue";
-
-import { ref, computed } from "vue";
-
 export default {
   name: "app",
-  components: {
-    Header,
-    Sidebar,
-  },
-  setup() {
-    const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
-
-    // Calculate dynamic marginLeft value based on is_expanded
-    const mainContentMargin = computed(() => {
-      return is_expanded.value ? `calc(var(--sidebar-width))` : "4rem";
-    });
-
-    return {
-      is_expanded,
-      mainContentMargin,
-    };
-  },
 };
 </script>
 
@@ -59,41 +33,5 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  background: var(--light);
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  font-style: normal;
-}
-
-button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
-.app {
-  display: flex;
-
-  main {
-    flex: 1 1 0;
-    padding: 2rem;
-
-    @media (max-width: 1024px) {
-      padding-left: 6rem;
-    }
-  }
-  .main-content {
-    flex: 1; /* Occupy remaining space */
-    padding: 2rem;
-    transition: margin-left 0.2s ease; /* Apply transition to margin-left */
-  }
-}
-.router-view {
-  margin-top: 80px;
 }
 </style>

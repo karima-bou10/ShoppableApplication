@@ -33,7 +33,7 @@ export default {
   name: "Header",
   data() {
     return {
-      pageTitle: "",
+      pageTitle: "Dashboard",
     };
   },
   created() {
@@ -60,10 +60,11 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 1;
+
   padding: 18px 25px;
   background-color: var(--white);
   position: fixed;
+  z-index: 1;
   width: 100%;
   height: 58px;
   top: 0;

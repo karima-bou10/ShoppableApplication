@@ -1,17 +1,13 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import HotSpots from 'vue3-hot-spot'
-import 'vue3-hot-spot/dist/vue3-hot-spot.css';
-import store from './store';
+import HotSpots from "vue3-hot-spot";
+import "vue3-hot-spot/dist/vue3-hot-spot.css";
+import store from "./store";
 
 const app = createApp(App);
 
-app.use(router).mount("#app");
-
+app.use(store).use(router).mount("#app");
 
 // Register HotSpots as a global component
-app.component('HotSpots', HotSpots);
-app.use(store);
-// Mount the app
-app.mount('#app');
+app.component("HotSpots", HotSpots);

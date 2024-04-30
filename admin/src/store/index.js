@@ -1,21 +1,42 @@
-// store/index.js
-import { createStore } from 'vuex';
+import AuthService from "../services/auth.service";
 
-export default createStore({
-  state: {
-    dots: [],
-    
+const user = JSON.parse(localStorage.getItem("user"));
+const initialState = user
+  ? { status: { loggedIn: true }, user }
+  : { status: { loggedIn: false }, user: null };
+
+export const auth = {
+  namespaced: true,
+  state: initialState,
+  actions: {
+    login({ commit }, user) {
+      return AuthService.login(user)
+        .then((data) => {
+          commit("loginSuccess", data); // Mutate the state upon successful login
+          return Promise.resolve(data);
+        })
+        .catch((error) => {
+          commit("loginFailure", error); // Mutate the state upon login failure
+          return Promise.reject(error);
+        });
+    },
+    logout({ commit }) {
+      AuthService.logout();
+      commit("logout");
+    },
   },
   mutations: {
-    updateDotsArrBuf(state, newDotsArr) {
-      state.dots = newDotsArr;
+    loginSuccess(state, user) {
+      state.status.loggedIn = true;
+      state.user = user;
     },
-    // Other mutations...
+    loginFailure(state) {
+      state.status.loggedIn = false;
+      state.user = null;
+    },
+    logout(state) {
+      state.status.loggedIn = false;
+      state.user = null;
+    },
   },
-  actions: {
-    // Your actions...
-  },
-  getters: {
-    // Your getters...
-  }
-});
+};
