@@ -13,7 +13,7 @@
     </div>
 
     <div class="menu">
-      <router-link to="/" class="button">
+      <router-link to="/dashboard" class="button">
         <span class="material-symbols-outlined"> dashboard </span>
         <span class="text">Dashboard</span>
       </router-link>
@@ -24,6 +24,10 @@
       <router-link to="/orders" class="button">
         <span class="material-symbols-outlined"> shopping_bag </span>
         <span class="text">Orders</span>
+      </router-link>
+      <router-link to="/users" class="button">
+        <span class="material-symbols-outlined"> group </span>
+        <span class="text">Users</span>
       </router-link>
       <router-link to="/shoppable_image" class="button">
         <span class="material-symbols-outlined"> adjust </span>
@@ -42,21 +46,41 @@
         <span class="material-symbols-outlined"> settings </span>
         <span class="text">Settings</span>
       </router-link>
+      <button @click="handleClick" class="button">
+        <span class="material-symbols-outlined"> logout </span>
+        <span class="text">Log Out</span>
+      </button>
     </div>
   </aside>
 </template>
 
 <script setup>
-import { ref } from "vue";
+/* eslint-disable */
+import { ref, getCurrentInstance } from "vue";
 import logoURL1 from "../assets/logoStoreino1.png";
 import logoURL2 from "../assets/logoStoreino2.jpg";
+import AuthService from "@/services/auth.service";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const instance = getCurrentInstance();
+
+const handleClick = () => {
+  // Implement your confirmation logic here
+  const confirmLogout = window.confirm("Are you sure you want to log out?");
+  if (confirmLogout) {
+    AuthService.logout(); // Call logout method from AuthService to clear localStorage
+    router.push("/"); // Redirect user to login page
+  }
+};
 const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
 const ToggleMenu = () => {
   is_expanded.value = !is_expanded.value;
   localStorage.setItem("is_expanded", is_expanded.value.toString());
   console.log(is_expanded.value);
+
+  instance.emit("toggleExpanded", is_expanded.value);
 
   // Update main content's margin-left immediately
   const mainContent = document.querySelector(".main-content");
