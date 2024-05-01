@@ -1,28 +1,60 @@
- // app.js
- const express = require('express');
- const app = express();
- const mongoose = require('mongoose');
- const cors = require('cors')
- const cookieParser = require('cookie-parser')
+const express = require("express");
+const cors = require("cors");
+const db = require("./models");
+const Role = db.role;
+const dbConfig = require("./config/db.config");
 
- const routes = require('./routes/routes')
- // Connect to MongoDB
- mongoose.connect('mongodb://127.0.0.1:27017/server', {
-     useNewUrlParser: true,
-     useUnifiedTopology: true
- })
- .then(() => console.log('Connected to MongoDB'))
- .catch(err => console.error('Error connecting to MongoDB:', err));
+const app = express();
+const PORT = process.env.PORT || 8080;
 
-  // Define your routes here
-  app.use(cookieParser())
-  app.use(cors({
-    credentails:true,
-    origin: ['http://localhost:8082'] //add all front path
-  }))
-  app.use(express.json())
-  app.use('/api',routes)
- const port = process.env.PORT || 3000;
- app.listen(port, () => {
-     console.log(`Server is running on port ${port}`);
- });
+// Middleware
+app.use(cors({ origin: "http://localhost:8082" }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the application." });
+});
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+  connectToDatabase();
+});
+
+// Connect to MongoDB
+async function connectToDatabase() {
+  try {
+    await db.mongoose.connect(
+      `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    console.log("Successfully connected to MongoDB.");
+    await initializeRoles();
+  } catch (error) {
+    console.error("Connection error:", error);
+    process.exit(1);
+  }
+}
+
+// Initialize roles in the database
+async function initializeRoles() {
+  const roles = ["user", "admin"];
+  for (const roleName of roles) {
+    try {
+      const existingRole = await Role.findOne({ name: roleName });
+      if (!existingRole) {
+        await new Role({ name: roleName }).save();
+        console.log(`Added '${roleName}' to roles collection.`);
+      }
+    } catch (error) {
+      console.error(`Error adding '${roleName}' to roles collection:`, error);
+    }
+  }
+}
