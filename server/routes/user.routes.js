@@ -1,6 +1,8 @@
 const { authJwt } = require("../middlewares");
+const { verifySignUp } = require("../middlewares");
 const controller = require("../Controllers/user.controller");
-
+// const db = require("../models");
+// const User = db.user;
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header(
@@ -9,6 +11,9 @@ module.exports = function (app) {
     );
     next();
   });
+
+  // Route to get all users
+  app.get("/api/users/getAllUsers", controller.getAllUsers);
 
   app.get("/api/test/all", controller.allAccess);
 
@@ -23,4 +28,7 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+  app.put("/api/users/:id", controller.updateUser);
+  app.delete("/api/users/:id", controller.deleteUser);
+  app.get("/api/users/:username", controller.findOne);
 };

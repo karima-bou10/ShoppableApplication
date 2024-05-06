@@ -5,6 +5,11 @@ const User = db.user;
 //check duplications for username and email
 checkDuplicateUsernameOrEmail = async (req, res, next) => {
   try {
+    console.log(
+      "Checking for duplicate username or email:",
+      req.body.username,
+      req.body.email
+    );
     const usernameExists = await User.findOne({ username: req.body.username });
     if (usernameExists) {
       return res
@@ -27,6 +32,7 @@ checkDuplicateUsernameOrEmail = async (req, res, next) => {
 
 //check if roles in the request is legal or not
 checkRolesExisted = (req, res, next) => {
+  console.log("Checking if roles exist:", req.body.roles);
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
