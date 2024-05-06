@@ -19,7 +19,7 @@ const router = createRouter({
     },
     { path: "/register", component: Register },
     {
-      path: "/home",
+      path: "/admin",
       component: Home,
       meta: { requiresAuth: true },
       children: [

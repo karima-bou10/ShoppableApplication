@@ -207,7 +207,7 @@ const shopImgs = [
 ];
 </script>
 
-<style>
+<style scoped>
 /* width */
 ::-webkit-scrollbar {
   width: 8px;
