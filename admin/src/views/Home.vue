@@ -1,6 +1,7 @@
 <template>
   <div id="Home-page">
-    <Sidebar @toggleExpanded="handleToggleExpanded" />
+    <Sidebar v-if="isAdmin" @toggleExpanded="handleToggleExpanded" />
+    <UserSidebar v-else @toggleExpanded="handleToggleExpanded" />
     <div class="main-content" :style="{ marginLeft: mainContentMargin }">
       <Header />
       <div class="router-view">
@@ -12,16 +13,22 @@
 <script>
 import Header from "../components/Header.vue";
 import Sidebar from "../components/Sidebar.vue";
+import UserSidebar from "../components/User/UserSidebar.vue";
 import { ref, computed } from "vue";
+import AuthService from "../services/auth.service";
 
 export default {
   name: "Home",
+
   components: {
     Header,
     Sidebar,
+    UserSidebar,
   },
 
   setup() {
+    console.log("is admin ", AuthService.getUserRole());
+    const isAdmin = AuthService.getUserRole() === "ROLE_ADMIN";
     const is_expanded = ref(true);
     const handleToggleExpanded = (value) => {
       is_expanded.value = value;
@@ -36,6 +43,8 @@ export default {
     });
 
     return {
+      isAdmin,
+      is_expanded,
       mainContentMargin,
       handleToggleExpanded,
     };

@@ -1,12 +1,10 @@
 <template>
- <main id="Dashboard-page">
+  <main id="Dashboard-page">
     <h1>dashboard</h1>
     <p>This is the dashboard page</p>
   </main>
 </template>
-<script>
-
-</script>
+<script></script>
 <style>
 body {
   background: var(--light);

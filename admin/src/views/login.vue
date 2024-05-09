@@ -10,13 +10,15 @@
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="#" method="POST" @submit.prevent="login">
         <div>
-          <label
-            class="block text-sm font-medium leading-6 text-gray-900"
-            type="text"
-            for="username"
-          >
-            username
-          </label>
+          <div class="flex items-center justify-between">
+            <label
+              class="block text-sm font-medium leading-6 text-gray-900"
+              type="text"
+              for="username"
+            >
+              username
+            </label>
+          </div>
           <div class="mt-2">
             <input
               v-model="username"
@@ -28,22 +30,31 @@
           </div>
         </div>
         <div>
-          <div class="flex items-center justify-between">
-            <label
-              class="block text-sm font-medium leading-6 text-gray-900"
-              for="password"
-            >
-              Password
-            </label>
-          </div>
           <div class="mt-2">
-            <input
-              v-model="password"
-              required=""
-              class="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              id="password"
-              type="password"
-            />
+            <div class="flex items-center justify-between">
+              <label
+                class="block text-sm font-medium leading-6 text-gray-900"
+                for="password"
+              >
+                Password
+              </label>
+            </div>
+            <div class="relative mt-2">
+              <input
+                v-model="password"
+                required
+                class="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pr-10"
+                id="password"
+                :type="passwordFieldType"
+              />
+              <button
+                class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-600"
+                @click="togglePasswordVisibility"
+              >
+                <!-- Position button absolutely -->
+                <font-awesome-icon :icon="passwordFieldIcon" />
+              </button>
+            </div>
           </div>
         </div>
         <div>
@@ -95,6 +106,7 @@
 
 <script>
 import AuthService from "@/services/auth.service";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   data() {
@@ -103,6 +115,7 @@ export default {
       password: "",
       role: "",
       errorMessage: "",
+      showPassword: false,
     };
   },
   methods: {
@@ -121,7 +134,7 @@ export default {
         .then((response) => {
           // Authentication successful, store token
           localStorage.setItem("token", response.accessToken);
-          // Redirect to dashboard or protected route
+          // Redirect to dashboard based on role
           this.$router.push("/dashboard");
         })
         .catch((error) => {
@@ -136,41 +149,18 @@ export default {
           }
         });
     },
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+  },
+  computed: {
+    passwordFieldType() {
+      return this.showPassword ? "text" : "password";
+    },
+    passwordFieldIcon() {
+      return this.showPassword ? faEyeSlash : faEye;
+    },
   },
 };
-// import { reactive } from "vue";
-// import { useRouter } from "vue-router";
-
-// export default {
-//   name: "Login",
-//   setup() {
-//     const data = reactive({
-//       email: "",
-//       password: "",
-//     });
-//     const router = useRouter();
-
-//     const submit = async () => {
-//       try {
-//         await fetch("http://localhost:3000/api/login", {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json" },
-//           credentials: "include",
-//           body: JSON.stringify(data),
-//         });
-
-//         router.push("/home");
-//       } catch (error) {
-//         console.error("Error submitting login:", error);
-//         // Handle the error (e.g., display a message to the user)
-//       }
-//     };
-
-//     return {
-//       data,
-//       submit,
-//     };
-//   },
-// };
 </script>
 <style></style>
