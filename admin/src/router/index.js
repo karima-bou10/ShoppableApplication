@@ -34,7 +34,7 @@ const router = createRouter({
         {
           path: "/shoppable_image",
           component: ShoppableImage,
-          meta: { title: "ShoppableImage" },
+          meta: { title: "Shoppable Image" },
         },
         {
           path: "/message_to_buyer",

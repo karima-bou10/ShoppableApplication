@@ -73,7 +73,8 @@ const handleClick = () => {
     router.push("/"); // Redirect user to login page
   }
 };
-const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+//const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+const is_expanded = ref(true);
 
 const ToggleMenu = () => {
   is_expanded.value = !is_expanded.value;

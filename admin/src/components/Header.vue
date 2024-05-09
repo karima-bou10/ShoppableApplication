@@ -38,11 +38,22 @@ export default {
   },
   created() {
     // Watch for route changes and update the pageTitle accordingly
-    this.$router.afterEach((to) => {
-      this.pageTitle = this.getPageTitle(to);
-    });
+    // this.$router.afterEach((to) => {
+    //   this.pageTitle = this.getPageTitle(to);
+    // });
+    this.updatePageTitle(); // Mettre à jour le titre de la page lors de la création du composant
+  },
+  watch: {
+    $route: "updatePageTitle", // Surveiller les changements de la route et mettre à jour le titre
   },
   methods: {
+    // Méthode pour mettre à jour le titre de la page en fonction de la route actuelle
+    updatePageTitle() {
+      const pageTitle = this.getPageTitle(this.$route);
+      if (pageTitle) {
+        this.pageTitle = pageTitle;
+      }
+    },
     // Helper method to get the page title based on the route
     getPageTitle(route) {
       const matchingRoute = this.$route.matched.find(
