@@ -14,17 +14,17 @@
             <label
               class="block text-sm font-medium leading-6 text-gray-900"
               type="text"
-              for="username"
+              for="email"
             >
-              username
+              email
             </label>
           </div>
           <div class="mt-2">
             <input
-              v-model="username"
+              v-model="email"
               class="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              id="username"
-              type="text"
+              id="email"
+              type="email"
               required=""
             />
           </div>
@@ -111,7 +111,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export default {
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       role: "",
       errorMessage: "",
@@ -127,7 +127,7 @@ export default {
       }
       console.log("Selected role:", this.role);
       AuthService.login({
-        username: this.username,
+        email: this.email,
         password: this.password,
         role: this.role,
       })
@@ -142,7 +142,7 @@ export default {
           console.error("Login error:", error);
           if (error.response && error.response.status === 401) {
             // Unauthorized access (wrong password)
-            this.errorMessage = "Invalid username or password or role";
+            this.errorMessage = "Invalid email or password or role";
           } else {
             // Other error (network error, server error, etc.)
             this.errorMessage = "An error occurred during login.";

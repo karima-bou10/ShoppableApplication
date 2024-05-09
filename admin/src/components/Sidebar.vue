@@ -25,6 +25,10 @@
         <span class="material-symbols-outlined"> shopping_bag </span>
         <span class="text">Orders</span>
       </router-link>
+      <router-link to="/sales_history" class="button">
+        <span class="material-symbols-outlined"> payments </span>
+        <span class="text">Sales History</span>
+      </router-link>
       <router-link to="/users" class="button">
         <span class="material-symbols-outlined"> group </span>
         <span class="text">Users</span>
@@ -32,10 +36,6 @@
       <router-link to="/shoppable_image" class="button">
         <span class="material-symbols-outlined"> adjust </span>
         <span class="text">Shoppable image</span>
-      </router-link>
-      <router-link to="/message_to_buyer" class="button">
-        <span class="material-symbols-outlined"> chat </span>
-        <span class="text">Message to buyer</span>
       </router-link>
     </div>
 

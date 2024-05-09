@@ -59,7 +59,7 @@ export default {
         this.$emit("delete-user", this.deletedUser);
         this.close();
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.error("Error deleting user:", error);
         // Handle error
       }
     },

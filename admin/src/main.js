@@ -8,13 +8,15 @@ import store from "./store";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import VueApexCharts from "vue3-apexcharts";
 
 // Add the Font Awesome icons to the library
 library.add(faEye, faEyeSlash);
 
 const app = createApp(App);
 app.component("font-awesome-icon", FontAwesomeIcon);
-
+// Use VueApexCharts as a plugin
+app.component("apexchart", VueApexCharts);
 app.use(store).use(router).mount("#app");
 
 // Register HotSpots as a global component
