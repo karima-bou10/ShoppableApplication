@@ -22,7 +22,7 @@ exports.getAllUsers = async (req, res) => {
     // Fetch all users from the database
     // Log that the function is being called
     console.log("Fetching all users...");
-    const users = await User.find();
+    const users = await User.find({ "roles.0": "663009e5bb96e34d3942bc8a" });
 
     // Log the number of users fetched
     console.log(`Fetched ${users.length} users`);
@@ -79,18 +79,16 @@ exports.deleteUser = (req, res) => {
     });
 };
 exports.findOne = (req, res) => {
-  const name = req.params.username; // Assuming the username is passed in the URL params
-  User.findOne({ username: name }) // Using findOne with the username field
+  const email = req.params.email; // Assuming the username is passed in the URL params
+  User.findOne({ email: email }) // Using findOne with the username field
     .then((data) => {
       if (!data)
-        res
-          .status(404)
-          .send({ message: "Not found user with username " + name });
+        res.status(404).send({ message: "Not found user with email " + email });
       else res.send(data);
     })
     .catch((err) => {
       res
         .status(500)
-        .send({ message: "Error retrieving user with username=" + name });
+        .send({ message: "Error retrieving user with email=" + email });
     });
 };
