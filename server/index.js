@@ -4,6 +4,7 @@ const db = require("./models");
 const Role = db.role;
 const dbConfig = require("./config/db.config");
 
+//Init App
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
 });
+
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/category.routes")(app);

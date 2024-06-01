@@ -7,37 +7,54 @@ exports.create = (req, res) => {
   // Validate request
   if (
     !req.body.name ||
+    !req.body.reference ||
     !req.body.price ||
     !req.body.quantity ||
     !req.body.category
   ) {
     return res.status(400).send({
-      message: "Name, price, quantity, and category are required fields.",
+      message:
+        "Name, reference, price, quantity, and category are required fields.",
     });
   }
 
-  // Create a Product
-  const product = new Product({
-    name: req.body.name,
-    category: req.body.category,
-    price: req.body.price,
-    quantity: req.body.quantity,
-    description: req.body.description || "", // Description is optional
-    image: req.body.image || "", // Image is optional
-  });
+  // Check if a product with the same reference already exists
+  Product.findOne({ reference: req.body.reference }).then(
+    (existingRefProduct) => {
+      if (existingRefProduct) {
+        res
+          .status(400)
+          .send({ message: "Product with the same reference already exists!" });
+        return;
+      }
 
-  // Save Product in the database
-  product
-    .save()
-    .then((data) => {
-      res.status(201).send({ message: "Product created successfully.", data });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Product.",
+      // Create a Product
+      const product = new Product({
+        name: req.body.name,
+        reference: req.body.reference,
+        category: req.body.category,
+        price: req.body.price,
+        quantity: req.body.quantity,
+        description: req.body.description || "", // Description is optional
+        image: req.body.image || "", // Image is optional
       });
-    });
+
+      // Save Product in the database
+      product
+        .save()
+        .then((data) => {
+          res
+            .status(201)
+            .send({ message: "Product created successfully.", data });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the Product.",
+          });
+        });
+    }
+  );
 };
 
 // Retrieve all Products from the database.
@@ -83,7 +100,6 @@ exports.update = (req, res) => {
       message: "Data to update can not be empty!",
     });
   }
-
   const id = req.params.id;
 
   Product.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
