@@ -9,8 +9,10 @@ const PORT = process.env.PORT || 8080;
 
 // Middleware
 app.use(cors({ origin: "http://localhost:8082" }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" })); // Adjust the limit as needed
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Routes
 app.get("/", (req, res) => {
@@ -20,6 +22,9 @@ require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/category.routes")(app);
 require("./routes/product.routes")(app);
+require("./routes/order.routes")(app);
+require("./routes/collection.routes")(app);
+require("./routes/tag.routes")(app);
 
 // Start the server
 app.listen(PORT, () => {
