@@ -42,10 +42,6 @@
     <div class="flex"></div>
 
     <div class="menu">
-      <router-link to="/settings" class="button">
-        <span class="material-symbols-outlined"> settings </span>
-        <span class="text">Settings</span>
-      </router-link>
       <button @click="handleClick" class="button">
         <span class="material-symbols-outlined"> logout </span>
         <span class="text">Log Out</span>
@@ -73,7 +69,8 @@ const handleClick = () => {
     router.push("/"); // Redirect user to login page
   }
 };
-const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+//const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
+const is_expanded = ref(true);
 
 const ToggleMenu = () => {
   is_expanded.value = !is_expanded.value;

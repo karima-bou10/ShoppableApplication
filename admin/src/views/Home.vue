@@ -35,6 +35,7 @@ export default {
     };
 
     console.log("is_expanded home ", is_expanded.value);
+
     // Calculate dynamic marginLeft value based on is_expanded
     const mainContentMargin = computed(() => {
       console.log("is_expanded.value", is_expanded.value);

@@ -13,18 +13,35 @@
             class="flex items-center gap-5 py-3 px-7 hover:bg-gray-3 dark:hover:bg-meta-4"
           >
             <div
-              class="flex flex-1 items-center justify-between border-b border-blue-500 pb-3"
+              class="flex flex-1 items-center justify-between border-b border-blue-500 pb-3 ml-7"
             >
               <div>
                 <h5 class="font-medium text-black dark:text-white">
                   {{ order.name }}
+                  <span class="text-xs ml-10"> {{ order.time }} min</span>
                 </h5>
-                <p>
-                  <span class="text-sm text-black dark:text-white">
-                    {{ order.text }}
-                  </span>
-                  <span class="text-xs"> . {{ order.time }} min</span>
-                </p>
+                <div class="ml-10">
+                  <p>
+                    <span class="flex text-sm text-black dark:text-white">
+                      {{ order.text }}
+                      <svg
+                        class="w-2.5 h-2.5 ms-3 mt-2"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 10 6"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="m1 1 4 4 4-4"
+                        />
+                      </svg>
+                    </span>
+                  </p>
+                </div>
               </div>
               <div
                 v-if="order.textCount !== 0"
@@ -50,49 +67,49 @@ export default {
     const orderData = ref([
       {
         name: "Order 001",
-        text: "Product A",
+        text: "Products",
         time: 5,
         textCount: 0,
         color: "#10B981",
       },
       {
         name: "Order 002",
-        text: "Product B",
+        text: "Products",
         time: 10,
         textCount: 0,
         color: "#DC3545",
       },
       {
         name: "Order 003",
-        text: "Product C",
+        text: "Products",
         time: 15,
         textCount: 2,
         color: "#FFBA00",
       },
       {
         name: "Order 004",
-        text: "Product D",
+        text: "Products",
         time: 20,
         textCount: 0,
         color: "#10B981",
       },
       {
         name: "Order 004",
-        text: "Product D",
+        text: "Products",
         time: 20,
         textCount: 0,
         color: "#10B981",
       },
       {
         name: "Order 004",
-        text: "Product D",
+        text: "Products",
         time: 20,
         textCount: 0,
         color: "#10B981",
       },
       {
         name: "Order 004",
-        text: "Product D",
+        text: "Products",
         time: 20,
         textCount: 0,
         color: "#10B981",

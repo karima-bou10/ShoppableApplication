@@ -2,38 +2,23 @@
   <div
     class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8"
   >
-    <div
-      class="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap pt-5 px-2"
-    >
-      <div class="flex w-full flex-wrap gap-3 sm:gap-5">
+    <div class="flex items-start">
+      <div class="flex-1 text-center px-4 py-2 m-2">
         <div class="flex min-w-47.5">
-          <span
-            class="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary"
-          >
-            <span
-              class="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"
-            ></span>
-          </span>
-          <div class="w-full">
+          <div class="flex">
             <p class="font-semibold text-indigo-600">Total Revenue</p>
-            <p class="text-sm font-medium">12.04.2022 - 12.05.2022</p>
-          </div>
-        </div>
-        <div class="flex min-w-47.5">
-          <span
-            class="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary"
-          >
-            <span
-              class="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"
-            ></span>
-          </span>
-          <div class="w-full">
-            <p class="font-semibold text-cyan-400">Total Sales</p>
-            <p class="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+            <p class="text-sm font-medium ml-5">30.04.2024-30.05.2024</p>
           </div>
         </div>
       </div>
-      <div class="flex w-full max-w-45 justify-end"></div>
+      <div class="flex-1 text-center px-4 py-2 m-2">
+        <div class="flex-1 min-w-47.5">
+          <div class="flex">
+            <p class="font-semibold text-cyan-400">Total Sales</p>
+            <p class="text-sm font-medium ml-5">30.04.2024-30.05.2024</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div>
       <div id="chartOne" class="-ml-5">

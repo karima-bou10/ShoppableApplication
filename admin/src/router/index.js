@@ -9,6 +9,7 @@ import Orders from "../views/Orders.vue";
 import ShoppableImage from "../views/ShoppableImage.vue";
 import SalesHistory from "../views/SalesHistory.vue";
 import Users from "../views/Users.vue";
+import Profil from "../views/profil.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -34,7 +35,7 @@ const router = createRouter({
         {
           path: "/shoppable_image",
           component: ShoppableImage,
-          meta: { title: "ShoppableImage" },
+          meta: { title: "Shoppable Image" },
         },
         {
           path: "/sales_history",
@@ -45,6 +46,11 @@ const router = createRouter({
           path: "/users",
           component: Users,
           meta: { title: "Users" },
+        },
+        {
+          path: "/profil",
+          component: Profil,
+          meta: { title: "Profil" },
         },
       ],
     },

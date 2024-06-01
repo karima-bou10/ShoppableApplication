@@ -60,8 +60,8 @@
             <th scope="col" class="px-6 py-3">Client Name</th>
             <th scope="col" class="px-6 py-3">Address</th>
             <th scope="col" class="px-6 py-3">Quantity</th>
-            <th scope="col" class="px-6 py-3 whitespace-nowrap">Prix Total</th>
-            <th scope="col" class="px-6 py-3">Date Creation</th>
+            <th scope="col" class="px-6 py-3 whitespace-nowrap">Total price</th>
+            <th scope="col" class="px-6 py-3">Order date</th>
             <th scope="col" class="px-6 py-3">Action</th>
           </tr>
         </thead>
@@ -89,7 +89,7 @@
             <td class="px-6 py-4">{{ order.client.name }}</td>
             <td class="px-6 py-4">{{ order.address }}</td>
             <td class="px-6 py-4">10 pr</td>
-            <td class="px-6 py-4">{{ order.total }}</td>
+            <td class="px-6 py-4">{{ order.total }} DH</td>
             <td class="px-6 py-4">{{ order.dateCreation.split("T")[0] }}</td>
             <td class="px-6 py-4">
               <div class="button-group flex justify-between">
@@ -199,7 +199,7 @@ export default {
     console.log("Component mounted");
     try {
       const response = await orderService.getAllOrders();
-      console.log(response.data);
+      console.log("orders from back", response.data);
       this.orders = response.data; // Assign fetched orders to the data property
       // Map the orders to include only the necessary fields (including the ID)
     } catch (error) {
