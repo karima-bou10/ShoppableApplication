@@ -57,7 +57,7 @@
         <span class="whitespace-nowrap">Add user</span>
       </button>
     </form>
-    <!-- Products Table  -->
+    <!-- Users Table  -->
     <div
       class="table-container relative overflow-x-auto shadow-md sm:rounded-lg my-8 mx-7 overflow-y-scroll"
     >

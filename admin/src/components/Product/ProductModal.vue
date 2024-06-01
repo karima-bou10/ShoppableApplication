@@ -38,8 +38,27 @@
             </button>
           </div>
           <!-- Modal body -->
-          <form class="p-4 md:p-5" @submit.prevent="saveProduct">
-            <div class="grid gap-4 mb-4 grid-cols-3 grid-cols-custom">
+          <form class="p-4 md:p-5" @submit.prevent="saveProduct" method="POST">
+            <div class="grid gap-4 mb-4 grid-cols-4 grid-cols-custom">
+              <div class="col-span-1">
+                <label
+                  for="ref"
+                  class="block mb-2 text-sm font-medium text-left text-gray-900"
+                  >Reference</label
+                >
+                <input
+                  type="text"
+                  v-model="formData.reference"
+                  name="ref"
+                  id="ref"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="N° ref"
+                  required
+                />
+                <div v-if="productRefExists" class="text-xs pt-2 text-red-600">
+                  Ref already exists
+                </div>
+              </div>
               <div class="col-span-2">
                 <label
                   for="name"
@@ -77,9 +96,9 @@
                         {{ buttonText }}
                       </button>
                       <input
-                        id="file-upload"
-                        name="file-upload"
                         type="file"
+                        name="file-upload"
+                        id="file-upload"
                         accept="image/png, image/jpeg"
                         ref="fileInput"
                         class="sr-only"
@@ -88,6 +107,7 @@
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
+
                   <div v-if="uploadedImageURL">
                     <img
                       :src="uploadedImageURL"
@@ -100,7 +120,7 @@
                 </div>
               </div>
 
-              <div class="col-span-2">
+              <div class="col-span-3">
                 <label
                   for="category"
                   class="block mb-2 text-sm font-medium text-left text-gray-900"
@@ -121,7 +141,7 @@
                   </option>
                 </select>
               </div>
-              <div class="col-span-1">
+              <div class="col-span-2">
                 <label
                   for="price"
                   class="block mb-2 text-sm font-medium text-left text-gray-900"
@@ -158,7 +178,7 @@
                 </div>
               </div>
 
-              <div class="col-span-2">
+              <div class="col-span-3">
                 <label
                   for="description"
                   class="block mb-2 text-sm font-medium text-left text-gray-900"
@@ -201,8 +221,10 @@ export default {
       uploadedImageURL: null, // Add a data property to store the uploaded image
       invalidPrice: false,
       invalidQte: false,
+      productRefExists: false,
       formData: {
         name: "",
+        reference: "",
         category: {},
         quantity: 0,
         description: "",
@@ -210,6 +232,7 @@ export default {
       },
     };
   },
+
   methods: {
     closeModal() {
       this.$emit("close"); // Émet un événement pour fermer le modal
@@ -219,8 +242,44 @@ export default {
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
-      this.uploadedImageURL = URL.createObjectURL(file);
+      //this.uploadedImageURL = URL.createObjectURL(file);
+      if (file) this.createBase64Image(file);
       this.buttonText = "Change Image";
+    },
+    createBase64Image(fileObjet) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileObjet);
+      reader.onload = () => {
+        this.uploadedImageURL = reader.result;
+      };
+    },
+    checkSize() {
+      let base64Length =
+        this.uploadedImageURL.length - (this.uploadedImageURL.indexOf(",") + 1);
+      let padding =
+        this.uploadedImageURL.charAt(this.uploadedImageURL.length - 2) === "="
+          ? 2
+          : this.uploadedImageURL.charAt(this.uploadedImageURL.length - 1) ===
+            "="
+          ? 1
+          : 0;
+      let fileSize = base64Length * 0.75 - padding;
+      let sizeImage = this.niceBytes(fileSize);
+      console.log(sizeImage.split(" ")[0]);
+      let typeSize = sizeImage.split(" ")[1];
+      if (typeSize === "bytes" || typeSize === "KB") {
+        if (sizeImage.split(" ")[0] <= 500) return true;
+        else return false;
+      } else return false;
+    },
+    niceBytes(x) {
+      const units = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+      let l = 0,
+        n = parseInt(x, 10) || 0;
+      while (n >= 1024 && ++l) {
+        n = n / 1024;
+      }
+      return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
     },
 
     async saveProduct() {
@@ -245,6 +304,7 @@ export default {
       // Create a new product object using formData
       const newProduct = {
         name: this.formData.name,
+        reference: this.formData.reference,
         category: this.formData.category,
         quantity: parseInt(this.formData.quantity),
         description: this.formData.description,
@@ -257,14 +317,19 @@ export default {
         this.$emit("save", newProduct);
         this.closeModal();
       } catch (error) {
-        // Handle error
-        console.error("Error creating product:", error);
+        // Handle error response
+        if (error.response && error.response.status === 400) {
+          this.productRefExists = true; // Set flag to display error message
+          console.error("Error Product reference already exists:", error);
+        } else {
+          // Other errors
+          console.error("Error creating product:", error);
+        }
       }
     },
   },
 };
 </script>
-
 <style scoped>
 @import "./styleModal.css";
 
@@ -272,6 +337,6 @@ export default {
   background-color: rgb(0, 0, 0, 0.5);
 }
 .grid-cols-custom {
-  grid-template-columns: 1fr 1fr 2fr; /* 3ème colonne prend 2 fois la taille de la 1ère */
+  grid-template-columns: 1fr 1fr 2fr 4fr; /* 3ème colonne prend 2 fois la taille de la 1ère */
 }
 </style>
