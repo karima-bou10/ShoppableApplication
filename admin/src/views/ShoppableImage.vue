@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import AddImage from "../components/AddImage.vue";
-import Collection from "../components/Collection.vue";
+import AddImage from "../components/ShoppableImage/AddImage.vue";
+import Collection from "../components/ShoppableImage/Collection.vue";
 
 export default {
   components: {

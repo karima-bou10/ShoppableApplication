@@ -34,9 +34,9 @@
     <div class="flex"></div>
 
     <div class="menu">
-      <router-link to="/settings" class="button">
-        <span class="material-symbols-outlined"> settings </span>
-        <span class="text">Settings</span>
+      <router-link to="/profil" class="button">
+        <span class="material-symbols-outlined"> account_circle </span>
+        <span class="text">Profil</span>
       </router-link>
       <button @click="handleClick" class="button">
         <span class="material-symbols-outlined"> logout </span>

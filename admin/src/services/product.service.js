@@ -30,6 +30,17 @@ class ProductService {
   }
 
   createProduct(data) {
+    // // Convert data to JSON string
+    // const jsonData = JSON.stringify(data);
+
+    // // Create a Blob from the JSON string
+    // const blob = new Blob([jsonData], { type: "application/json" });
+
+    // // Measure the size of the Blob in bytes
+    // const payloadSize = blob.size;
+
+    // // Log the payload size
+    // console.log("Payload size:", payloadSize, "bytes");
     return axios
       .post(API_URL, data)
       .then((response) => {

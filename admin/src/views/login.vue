@@ -4,7 +4,7 @@
       <h2
         class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
       >
-        Sign in to your account
+        log in to your account
       </h2>
     </div>
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -14,17 +14,18 @@
             <label
               class="block text-sm font-medium leading-6 text-gray-900"
               type="text"
-              for="username"
+              for="email"
             >
-              username
+              email
             </label>
           </div>
           <div class="mt-2">
             <input
-              v-model="username"
+              v-model="email"
+              placeholder="email"
               class="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              id="username"
-              type="text"
+              id="email"
+              type="email"
               required=""
             />
           </div>
@@ -42,6 +43,7 @@
             <div class="relative mt-2">
               <input
                 v-model="password"
+                placeholder="**************"
                 required
                 class="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pr-10"
                 id="password"
@@ -88,7 +90,7 @@
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             type="submit"
           >
-            Sign In
+            Submit
           </button>
         </div>
       </form>
@@ -111,7 +113,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export default {
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       role: "",
       errorMessage: "",
@@ -127,7 +129,7 @@ export default {
       }
       console.log("Selected role:", this.role);
       AuthService.login({
-        username: this.username,
+        email: this.email,
         password: this.password,
         role: this.role,
       })
@@ -142,7 +144,7 @@ export default {
           console.error("Login error:", error);
           if (error.response && error.response.status === 401) {
             // Unauthorized access (wrong password)
-            this.errorMessage = "Invalid username or password or role";
+            this.errorMessage = "Invalid email or password or role";
           } else {
             // Other error (network error, server error, etc.)
             this.errorMessage = "An error occurred during login.";

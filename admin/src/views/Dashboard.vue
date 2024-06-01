@@ -1,44 +1,32 @@
 <template>
   <main id="Dashboard-page">
-    <h1>dashboard</h1>
-    <p>This is the dashboard page</p>
+    <div class="mx-auto max-w-screen-2xl p-2 2xl:p-10">
+      <div
+        class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5"
+      >
+        <DataStatsOne />
+      </div>
+      <div
+        class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5"
+      >
+        <ProductChart />
+        <Orders />
+      </div>
+    </div>
   </main>
 </template>
-<script></script>
-<style>
-body {
-  background: var(--light);
-  font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  font-style: normal;
-}
+<script>
+import DataStatsOne from "@/components/Dashboard/DataStatsOne.vue";
+import ProductChart from "@/components/Dashboard/chart.vue";
+import Orders from "@/components/Dashboard/orderCard.vue";
 
-button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
-.app {
-  display: flex;
-
-  main {
-    flex: 1 1 0;
-    padding: 2rem;
-
-    @media (max-width: 1024px) {
-      padding-left: 6rem;
-    }
-  }
-  .main-content {
-    flex: 1; /* Occupy remaining space */
-    padding: 2rem;
-    transition: margin-left 0.2s ease; /* Apply transition to margin-left */
-  }
-}
-.router-view {
-  margin-top: 80px;
-}
-</style>
+export default {
+  name: "Dashboard ",
+  components: {
+    DataStatsOne,
+    ProductChart,
+    Orders,
+  },
+};
+</script>
+<style></style>

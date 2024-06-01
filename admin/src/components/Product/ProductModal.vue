@@ -300,6 +300,10 @@ export default {
         this.invalidQte = true;
         return;
       }
+      if (!this.checkSize()) {
+        alert(`la taille de image doit pas dépasser 500 ko !! `, "warning");
+        return false;
+      }
 
       // Create a new product object using formData
       const newProduct = {

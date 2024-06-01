@@ -7,8 +7,9 @@ import Register from "../views/Register.vue";
 import Products from "../views/Products.vue";
 import Orders from "../views/Orders.vue";
 import ShoppableImage from "../views/ShoppableImage.vue";
-import MessageToBuyer from "../views/MessageToBuyer.vue";
+import SalesHistory from "../views/SalesHistory.vue";
 import Users from "../views/Users.vue";
+import Profil from "../views/profil.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,14 +38,19 @@ const router = createRouter({
           meta: { title: "Shoppable Image" },
         },
         {
-          path: "/message_to_buyer",
-          component: MessageToBuyer,
-          meta: { title: "Message To Buyer" },
+          path: "/sales_history",
+          component: SalesHistory,
+          meta: { title: "Sales History" },
         },
         {
           path: "/users",
           component: Users,
           meta: { title: "Users" },
+        },
+        {
+          path: "/profil",
+          component: Profil,
+          meta: { title: "Profil" },
         },
       ],
     },
