@@ -1,6 +1,5 @@
 <template>
   <div class="page-container">
-    <AppHeader @toggle-cart="toggleCart" />
     <AppNavbar />
     <HomeBanner />
     <section class="products">
@@ -23,17 +22,17 @@
 </template>
 
 <script>
-import AppHeader from "@/components/AppHeader.vue";
 import AppNavbar from "@/components/AppNavbar.vue";
 import HomeBanner from "@/components/HomeBanner.vue";
 // import AppFooter from "@/components/AppFooter.vue";
 import Cart from "@/components/PanierCard.vue";
 import HotspotImage from "@/components/HotspotsModal.vue";
 import CollectionService from "@/services/collection.service";
+import ProductService from "@/services/product.service";
 
 export default {
   components: {
-    AppHeader,
+    // AppHeader,
     AppNavbar,
     HomeBanner,
     HotspotImage,
@@ -63,12 +62,12 @@ export default {
     };
   },
   methods: {
-    toggleCart() {
-      this.isCartVisible = !this.isCartVisible;
-    },
-    closeCart() {
-      this.isCartVisible = false;
-    },
+    //  toggleCart() {
+    //    this.isCartVisible = !this.isCartVisible;
+    //  },
+    // closeCart() {
+    //   this.isCartVisible = false;
+    // },
     async fetchCollections() {
       try {
         const collectionsResponse = await CollectionService.getAllCollections();
@@ -82,16 +81,24 @@ export default {
             );
             const tags = tagsResponse.data;
 
-            const hotspots = tags.map((tag) => ({
-              x: tag.posX,
-              y: tag.posY,
-              title: tag.text,
-              bgcolor: tag.bgcolor,
-              dotcolor: tag.dotcolor,
-              textcolor: tag.textcolor,
-
-              // Add other properties as needed
-            }));
+            const hotspots = await Promise.all(
+              tags.map(async (tag) => {
+                // Fetch product details for each hotspot
+                const product = await ProductService.getProductById(
+                  tag.productID
+                );
+                return {
+                  x: tag.posX,
+                  y: tag.posY,
+                  title: tag.text,
+                  bgcolor: tag.bgcolor,
+                  dotcolor: tag.dotcolor,
+                  textcolor: tag.textcolor,
+                  product: product, // Assign the fetched product directly
+                  // Add other properties as needed
+                };
+              })
+            );
 
             return {
               id: collectionId,

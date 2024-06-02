@@ -1,9 +1,5 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import ProductDetail from "../views/ProductDetail.vue";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHistory } from "vue-router";
+import Home from "../views/HomePage.vue";
 
 const routes = [
   {
@@ -14,14 +10,13 @@ const routes = [
   {
     path: "/product/:id",
     name: "ProductDetail",
-    component: ProductDetail,
+    component: () => import("../components/ProductDetails.vue"),
     props: true,
   },
 ];
 
-const router = new VueRouter({
-  mode: "history",
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 });
 

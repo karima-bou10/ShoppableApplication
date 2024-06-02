@@ -5,9 +5,11 @@
       <div class="product-info">
         <h1>{{ product.name }}</h1>
         <p>{{ product.description }}</p>
-        <p class="product-price">{{ product.price }}DH</p>
+        <p class="product-price">{{ product.price }} DH</p>
         <div class="add-to-cart">
-          <button class="btn-add-to-cart">Add to basket</button>
+          <button class="btn-add-to-cart" @click="addToBasket">
+            Add to Basket
+          </button>
           <input
             type="number"
             v-model="quantity"
@@ -18,12 +20,13 @@
       </div>
     </div>
     <div class="recommended-products">
-      <h2>Recommended for you</h2>
+      <h2>Recommended for You</h2>
       <div class="recommended-list">
         <div
           v-for="item in recommendedProducts"
           :key="item.id"
           class="recommended-item"
+          @click="navigateToProduct(item.id)"
         >
           <img
             :src="item.image"
@@ -31,7 +34,7 @@
             class="recommended-image"
           />
           <p>{{ item.name }}</p>
-          <p>{{ item.price }}DH</p>
+          <p>{{ item.price }} DH</p>
         </div>
       </div>
     </div>
@@ -39,45 +42,73 @@
 </template>
 
 <script>
+import { ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useStore } from "vuex"; // Correctly import useStore
+import ProductService from "@/services/product.service";
+import CategoryService from "@/services/category.service.js";
+
 export default {
   props: ["id"],
-  data() {
-    return {
-      product: {},
-      recommendedProducts: [],
-      quantity: 1,
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const store = useStore(); // Use useStore
+    const product = ref({});
+    const category = ref("");
+    const recommendedProducts = ref([]);
+    const quantity = ref(1);
+
+    const fetchProductDetails = async (id) => {
+      try {
+        const response = await ProductService.getProductById(id);
+        product.value = response;
+        category.value = product.value.category;
+        fetchRecommendedProducts(category.value);
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
     };
-  },
-  created() {
-    // Fetch the product details using the id prop
-    this.fetchProductDetails();
-    // Fetch recommended products (this is a placeholder, you should replace it with actual logic)
-    this.fetchRecommendedProducts();
-  },
-  methods: {
-    fetchProductDetails() {
-      // Replace this with your actual API call or logic to fetch product details
-      this.product = {
-        id: this.id,
-        name: "MICKE",
-        description:
-          "A clean and simple look that fits just about anywhere. You can combine it with other desks or drawer units in the MICKE series to extend your work space. The clever design at the back hides messy cables.",
-        price: 549,
-        image: require("@/assets/product-image.png"), // Replace with actual image path
+
+    const fetchRecommendedProducts = async (category) => {
+      try {
+        const response = await CategoryService.getProductsByCategoryId(
+          category
+        );
+        recommendedProducts.value = response;
+      } catch (error) {
+        console.error("Error fetching recommended products:", error);
+      }
+    };
+
+    const navigateToProduct = (productId) => {
+      router.push({ name: "ProductDetail", params: { id: productId } });
+    };
+
+    const addToBasket = () => {
+      const productToAdd = {
+        ...product.value,
+        quantity: quantity.value,
       };
-    },
-    fetchRecommendedProducts() {
-      // Replace this with your actual API call or logic to fetch recommended products
-      this.recommendedProducts = [
-        {
-          id: 1,
-          name: "MICKE",
-          price: 549,
-          image: require("@/assets/recommended-product1.png"), // Replace with actual image path
-        },
-        // Add more recommended products here
-      ];
-    },
+      store.dispatch("addToBasket", productToAdd); // Dispatch action to Vuex store
+    };
+
+    watch(
+      () => route.params.id,
+      (newId) => {
+        fetchProductDetails(newId);
+      },
+      { immediate: true }
+    );
+
+    return {
+      product,
+      category,
+      recommendedProducts,
+      quantity,
+      navigateToProduct,
+      addToBasket,
+    };
   },
 };
 </script>
@@ -86,7 +117,10 @@ export default {
 .product-detail {
   padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 20px auto;
+  border: 4px solid #0a084d;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .product-main {
@@ -101,10 +135,13 @@ export default {
 
 .product-info {
   flex: 1;
+  margin-left: 30px;
+  margin-top: 30px;
 }
 
 .product-info h1 {
-  font-size: 24px;
+  font-size: 50px;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
@@ -115,7 +152,7 @@ export default {
 .product-price {
   font-size: 24px;
   font-weight: bold;
-  color: #00509e;
+  color: #000000;
 }
 
 .add-to-cart {
@@ -131,11 +168,15 @@ export default {
   border: none;
   cursor: pointer;
   margin-right: 10px;
+  border-radius: 20px;
 }
 
 .quantity-input {
   width: 60px;
   padding: 5px;
+  border-radius: 20px;
+  text-align: center;
+  background-color: #bdc2c6;
 }
 
 .recommended-products {
@@ -149,6 +190,7 @@ export default {
 }
 
 .recommended-list {
+  background-color: white;
   display: flex;
   overflow-x: auto;
 }
@@ -156,10 +198,12 @@ export default {
 .recommended-item {
   margin-right: 20px;
   text-align: center;
+  cursor: pointer;
 }
 
 .recommended-image {
   width: 100px;
   height: auto;
+  cursor: pointer;
 }
 </style>

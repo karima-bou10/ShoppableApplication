@@ -5,15 +5,15 @@
       <button @click="closeCart">X</button>
     </div>
     <div class="cart-content">
-      <div v-for="item in cartItems" :key="item.id" class="cart-item">
+      <div v-for="item in basketItems" :key="item.id" class="cart-item">
         <img :src="item.image" :alt="item.name" />
         <div>
           <h4>{{ item.name }}</h4>
           <p>{{ item.price }} DH</p>
           <div class="quantity">
-            <button @click="decreaseQuantity(item)">-</button>
+            <button @click="decreaseQuantity(item.id)">-</button>
             <span>{{ item.quantity }}</span>
-            <button @click="increaseQuantity(item)">+</button>
+            <button @click="increaseQuantity(item.id)">+</button>
           </div>
         </div>
       </div>
@@ -26,37 +26,22 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   props: {
     isVisible: {
       type: Boolean,
       required: true,
     },
-    cartItems: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
-  },
-  methods: {
-    closeCart() {
-      this.$emit("close-cart");
-    },
-    increaseQuantity(item) {
-      item.quantity++;
-    },
-    decreaseQuantity(item) {
-      if (item.quantity > 1) {
-        item.quantity--;
-      }
-    },
   },
   computed: {
-    cartSubtotal() {
-      return this.cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
+    ...mapGetters(["basketItems", "cartSubtotal"]),
+  },
+  methods: {
+    ...mapActions(["increaseQuantity", "decreaseQuantity"]),
+    closeCart() {
+      this.$emit("close-cart");
     },
   },
 };

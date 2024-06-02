@@ -14,20 +14,23 @@
         left: `${hotspot.x}%`,
         backgroundColor: hotspot.dotcolor,
       }"
+      @click="navigateToProduct(hotspot.product.id)"
     >
       <div
         class="tooltip"
         :style="{ backgroundColor: hotspot.bgcolor, color: hotspot.textcolor }"
       >
-        <h3>{{ hotspot.title }}</h3>
+        <h3 class="border-b-2 mb-2">{{ hotspot.title }}</h3>
         <p>{{ hotspot.description }}</p>
-        <p>{{ hotspot.price }}</p>
+        <p>{{ hotspot.product.price }} DH</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { useRouter } from "vue-router"; // Correctly import useRouter
+
 export default {
   props: {
     imageSrc: {
@@ -38,6 +41,13 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  setup() {
+    const router = useRouter(); // Use useRouter
+    const navigateToProduct = (productId) => {
+      router.push({ name: "ProductDetail", params: { id: productId } });
+    };
+    return { navigateToProduct };
   },
 };
 </script>
@@ -54,7 +64,6 @@ export default {
   height: 20px;
   border-radius: 50%;
   cursor: pointer;
-  transform: translate(-50%, -50%);
 }
 
 .tooltip {
