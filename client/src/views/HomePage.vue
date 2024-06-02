@@ -15,6 +15,12 @@
       :is-visible="isCartVisible"
       :cart-items="cartItems"
       @close-cart="closeCart"
+      @toggle-contact="toggleContact"
+    />
+    <CheckoutOrder
+      :showCheckoutForm="showCheckoutForm"
+      :cartItems="cartItems"
+      @close-contact="closeContact"
     />
   </div>
 </template>
@@ -26,6 +32,8 @@ import HomeBanner from "@/components/HomeBanner.vue";
 import ProductCard from "@/components/ProductCard.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import Cart from "@/components/PanierCard.vue";
+import CheckoutOrder from "@/components/CheckoutOrder.vue";
+import img from "@/assets/desk.jpg";
 
 export default {
   components: {
@@ -35,26 +43,69 @@ export default {
     ProductCard,
     AppFooter,
     Cart,
+    CheckoutOrder,
   },
   data() {
     return {
       isCartVisible: false,
+      showCheckoutForm: false,
       cartItems: [
         {
           id: 1,
-          name: "MICKE Desk, white",
+          name: "MICKE Desk",
+          description: "white",
           price: 549,
           quantity: 1,
-          image: "micke-desk.jpg",
+          image: img,
         },
         {
           id: 2,
-          name: "MICKE Drawer unit on castors, white",
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
           price: 1195,
           quantity: 1,
-          image: "micke-drawer.jpg",
+          image: img,
         },
-        // Add more items as needed
+        {
+          id: 2,
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
+          price: 1195,
+          quantity: 1,
+          image: img,
+        },
+        {
+          id: 2,
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
+          price: 1195,
+          quantity: 1,
+          image: img,
+        },
+        {
+          id: 2,
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
+          price: 1195,
+          quantity: 1,
+          image: img,
+        },
+        {
+          id: 2,
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
+          price: 1195,
+          quantity: 1,
+          image: img,
+        },
+        {
+          id: 2,
+          name: "MICKE Drawer",
+          description: "unit on castors, white",
+          price: 1195,
+          quantity: 1,
+          image: img,
+        },
       ],
       products: [
         {
@@ -85,6 +136,12 @@ export default {
     },
     closeCart() {
       this.isCartVisible = false;
+    },
+    toggleContact() {
+      this.showCheckoutForm = true;
+    },
+    closeContact() {
+      this.showCheckoutForm = false;
     },
   },
 };
