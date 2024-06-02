@@ -53,6 +53,7 @@ export default {
 </script>
 
 <style>
+html,
 body {
   margin: 0;
   font-family: Arial, sans-serif;

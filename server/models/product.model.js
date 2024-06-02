@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 var schema = mongoose.Schema({
   name: String,
+  reference: { type: String, unique: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
   quantity: { type: Number, min: 0, integer: true },
   description: String,

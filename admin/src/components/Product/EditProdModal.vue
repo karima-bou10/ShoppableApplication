@@ -87,7 +87,7 @@
                   </div>
                   <div>
                     <img
-                      :src="uploadedImage"
+                      :src="editedProduct.image"
                       alt="Uploaded Image"
                       width="230"
                       height="300"
@@ -204,6 +204,7 @@ export default {
       uploadedImage: this.selectedProduct ? this.selectedProduct.image : "", // Add a data property to store the uploaded image
       invalidPrice: false,
       invalidQte: false,
+      productRefExists: false,
       editedProduct: { ...this.product }, // Initialize editedProduct with the product prop
     };
   },
@@ -222,8 +223,47 @@ export default {
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
-      this.uploadedImage = URL.createObjectURL(file);
+      //this.uploadedImage = URL.createObjectURL(file);
+      if (file) this.createBase64Image(file);
       this.editedProduct.image = this.uploadedImage;
+    },
+    createBase64Image(fileObjet) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileObjet);
+      reader.onload = () => {
+        this.editedProduct.image = reader.result;
+      };
+    },
+    checkSize() {
+      let base64Length =
+        this.editedProduct.image.length -
+        (this.editedProduct.image.indexOf(",") + 1);
+      let padding =
+        this.editedProduct.image.charAt(this.editedProduct.image.length - 2) ===
+        "="
+          ? 2
+          : this.editedProduct.image.charAt(
+              this.editedProduct.image.length - 1
+            ) === "="
+          ? 1
+          : 0;
+      let fileSize = base64Length * 0.75 - padding;
+      let sizeImage = this.niceBytes(fileSize);
+      console.log(sizeImage.split(" ")[0]);
+      let typeSize = sizeImage.split(" ")[1];
+      if (typeSize === "bytes" || typeSize === "KB") {
+        if (sizeImage.split(" ")[0] <= 500) return true;
+        else return false;
+      } else return false;
+    },
+    niceBytes(x) {
+      const units = ["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+      let l = 0,
+        n = parseInt(x, 10) || 0;
+      while (n >= 1024 && ++l) {
+        n = n / 1024;
+      }
+      return n.toFixed(n < 10 && l > 0 ? 1 : 0) + " " + units[l];
     },
 
     async saveChanges() {
@@ -250,8 +290,14 @@ export default {
         this.$emit("update", this.editedProduct);
         this.closeModal(); // Close modal after saving changes
       } catch (error) {
-        console.error("Error updating user:", error);
-        // Handle error
+        // Handle error response
+        if (error.response && error.response.status === 400) {
+          this.productRefExists = true; // Set flag to display error message
+          console.error("Error Product reference already exists:", error);
+        } else {
+          // Other errors
+          console.error("Error updating user:", error);
+        }
       }
     },
   },
@@ -265,6 +311,6 @@ export default {
   background-color: rgb(0, 0, 0, 0.06);
 }
 .grid-cols-custom {
-  grid-template-columns: 1fr 1fr 2fr; /* 3ème colonne prend 2 fois la taille de la 2ème */
+  grid-template-columns: 1fr 1fr 2fr; /* 3ème colonne prend 2 fois la taille de la 1ère */
 }
 </style>

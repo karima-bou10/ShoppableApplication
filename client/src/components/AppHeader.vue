@@ -2,9 +2,11 @@
   <header class="header">
     <div class="left-section">
       <router-link to="/" style="margin-right: 20px; cursor: pointer"
-        >HOME</router-link
+        >H O M E</router-link
       >
-      <router-link to="/about" style="cursor: pointer"> ABOUT US</router-link>
+      <router-link to="/about" style="cursor: pointer">
+        A B O U T &nbsp; U S</router-link
+      >
     </div>
     <div class="logo">
       <img src="@/assets/TIGMINO.png" alt="Tigmino Logo" />

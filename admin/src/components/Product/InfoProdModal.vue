@@ -46,12 +46,19 @@
                   <span class="sr-only">Close modal</span>
                 </button>
               </div>
+              <div
+                class="flex items-center justify-between p-3 md:p-5 rounded-t"
+              >
+                <h3 class="text-base text-left font-normal text-gray-500">
+                  {{ selectedProduct.reference }}
+                </h3>
+              </div>
 
               <div
                 class="flex items-center justify-between p-3 md:p-5 rounded-t"
               >
                 <h3 class="text-lg font-medium text-blue-500">
-                  {{ selectedProduct.price }}
+                  {{ selectedProduct.price }} DH
                 </h3>
               </div>
               <div
