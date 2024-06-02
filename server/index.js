@@ -9,9 +9,22 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middleware
-app.use(cors({ origin: "http://localhost:8082" }));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+// Middleware
+const allowedOrigins = ["http://localhost:8082", "http://localhost:8083"];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin, like mobile apps or curl requests
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 app.use(express.json({ limit: "50mb" })); // Adjust the limit as needed
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
