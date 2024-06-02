@@ -37,6 +37,7 @@ import Cart from "@/components/PanierCard.vue";
 import HotspotImage from "@/components/HotspotsModal.vue";
 import CollectionService from "@/services/collection.service";
 import CheckoutOrder from "@/components/CheckoutOrder.vue";
+import ProductService from "@/services/product.service";
 import img from "@/assets/desk.jpg";
 
 export default {
@@ -60,7 +61,6 @@ export default {
           description: "white",
           price: 549,
           quantity: 1,
-          image: "vase.png",
           image: img,
         },
         {
@@ -109,7 +109,6 @@ export default {
           description: "unit on castors, white",
           price: 1195,
           quantity: 1,
-          image: "vase.png",
           image: img,
         },
       ],
@@ -122,6 +121,12 @@ export default {
     },
     closeCart() {
       this.isCartVisible = false;
+    },
+    toggleContact() {
+      this.showCheckoutForm = true;
+    },
+    closeContact() {
+      this.showCheckoutForm = false;
     },
     async fetchCollections() {
       try {
@@ -136,16 +141,24 @@ export default {
             );
             const tags = tagsResponse.data;
 
-            const hotspots = tags.map((tag) => ({
-              x: tag.posX,
-              y: tag.posY,
-              title: tag.text,
-              bgcolor: tag.bgcolor,
-              dotcolor: tag.dotcolor,
-              textcolor: tag.textcolor,
-
-              // Add other properties as needed
-            }));
+            const hotspots = await Promise.all(
+              tags.map(async (tag) => {
+                // Fetch product details for each hotspot
+                const product = await ProductService.getProductById(
+                  tag.productID
+                );
+                return {
+                  x: tag.posX,
+                  y: tag.posY,
+                  title: tag.text,
+                  bgcolor: tag.bgcolor,
+                  dotcolor: tag.dotcolor,
+                  textcolor: tag.textcolor,
+                  product: product, // Assign the fetched product directly
+                  // Add other properties as needed
+                };
+              })
+            );
 
             return {
               id: collectionId,
@@ -161,14 +174,9 @@ export default {
       }
     },
   },
+
   mounted() {
     this.fetchCollections();
-    toggleContact() {
-      this.showCheckoutForm = true;
-    },
-    closeContact() {
-      this.showCheckoutForm = false;
-    },
   },
 };
 </script>

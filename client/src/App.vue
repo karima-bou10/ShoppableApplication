@@ -22,7 +22,7 @@ body {
   height: 100%;
   font-size: 14px;
   font-family: "poppins", sans-serif;
-  background-color: #f4f4f4;
+  background-color: #ffffff;
 }
 
 * {

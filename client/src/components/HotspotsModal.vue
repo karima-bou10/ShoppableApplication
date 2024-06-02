@@ -14,14 +14,15 @@
         left: `${hotspot.x}%`,
         backgroundColor: hotspot.dotcolor,
       }"
+      @click="navigateToProduct(hotspot.product.id)"
     >
       <div
         class="tooltip"
         :style="{ backgroundColor: hotspot.bgcolor, color: hotspot.textcolor }"
       >
-        <h3>{{ hotspot.title }}</h3>
+        <h3 class="border-b-2 mb-2">{{ hotspot.title }}</h3>
         <p>{{ hotspot.description }}</p>
-        <p>{{ hotspot.price }}</p>
+        <p>{{ hotspot.product.price }} DH</p>
       </div>
     </div>
   </div>
@@ -39,6 +40,15 @@ export default {
       required: true,
     },
   },
+  methods: {
+    navigateToProduct(productId) {
+      if (this.$router) {
+        this.$router.push({ name: "ProductDetail", params: { id: productId } });
+      } else {
+        console.error("Router instance is not available");
+      }
+    },
+  },
 };
 </script>
 
@@ -54,7 +64,6 @@ export default {
   height: 20px;
   border-radius: 50%;
   cursor: pointer;
-  transform: translate(-50%, -50%);
 }
 
 .tooltip {
