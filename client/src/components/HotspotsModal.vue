@@ -1,0 +1,75 @@
+<template>
+  <div class="hotspot-image-container relative inline-block">
+    <img
+      :src="imageSrc"
+      alt="Product Image"
+      class="product-image w-full h-auto"
+    />
+    <div
+      v-for="(hotspot, index) in hotspots"
+      :key="index"
+      class="hotspot"
+      :style="{
+        top: `${hotspot.y}%`,
+        left: `${hotspot.x}%`,
+        backgroundColor: hotspot.dotcolor,
+      }"
+    >
+      <div
+        class="tooltip"
+        :style="{ backgroundColor: hotspot.bgcolor, color: hotspot.textcolor }"
+      >
+        <h3>{{ hotspot.title }}</h3>
+        <p>{{ hotspot.description }}</p>
+        <p>{{ hotspot.price }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    imageSrc: {
+      type: String,
+      required: true,
+    },
+    hotspots: {
+      type: Array,
+      required: true,
+    },
+  },
+};
+</script>
+
+<style scoped>
+.hotspot-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.hotspot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.hotspot:hover .tooltip {
+  display: block;
+}
+</style>
