@@ -15,16 +15,13 @@
         backgroundColor: hotspot.dotcolor,
       }"
       @click="navigateToProduct(hotspot.product.id)"
-      @click="navigateToProduct(hotspot.product.id)"
     >
       <div
         class="tooltip"
         :style="{ backgroundColor: hotspot.bgcolor, color: hotspot.textcolor }"
       >
         <h3 class="border-b-2 mb-2">{{ hotspot.title }}</h3>
-        <h3 class="border-b-2 mb-2">{{ hotspot.title }}</h3>
         <p>{{ hotspot.description }}</p>
-        <p>{{ hotspot.product.price }} DH</p>
         <p>{{ hotspot.product.price }} DH</p>
       </div>
     </div>

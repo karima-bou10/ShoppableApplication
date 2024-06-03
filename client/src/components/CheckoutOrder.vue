@@ -1,7 +1,7 @@
 <template>
   <Transition name="modal">
     <div
-      v-if="showCheckoutForm"
+      v-if="isCheckoutRoute"
       tabindex="-1"
       class="modal-mask hidden modal-mask fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center bg-black bg-opacity-50 max-h-full"
     >
@@ -87,7 +87,12 @@
               />
             </div>
             <div class="flex items-center justify-center pt-5">
-              <button type="submit" class="checkout-button">
+              <button
+                type="submit"
+                class="checkout-button"
+                @click="submitOrder()"
+                :disabled="submittingOrder"
+              >
                 Confirm Order
               </button>
             </div>
@@ -140,8 +145,6 @@
                     </p>
                   </div>
 
-                  <p class="text-sm p-0.5">{{ item.description }}</p>
-
                   <div
                     class="mt-2 bg-slate-200 w-max px-3 rounded-md p-0.5 text-center"
                   >
@@ -172,71 +175,100 @@
 </template>
 
 <script>
-//import axios from "axios";
-
+import OrderService from "@/services/order.service";
 export default {
   props: {
     showCheckoutForm: {
       type: Boolean,
       required: true,
     },
-    cartItems: {
-      type: Array,
-      required: true,
-      default: () => [],
-    },
   },
   data() {
     return {
-      cart: JSON.parse(localStorage.getItem("cart")) || [],
+      submittingOrder: false,
+      cartItems: [],
       order: {
         email: "",
         firstName: "",
         lastName: "",
         address: "",
         phoneNumber: "",
-        products: JSON.parse(localStorage.getItem("cart")) || [],
       },
     };
   },
   computed: {
+    isCheckoutRoute() {
+      return this.$route.path === "/checkout";
+    },
     subtotal() {
-      return this.cart.reduce(
-        (sum, product) => sum + product.price * product.quantity,
+      // Calculate subtotal based on cartItems
+      return this.cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
         0
       );
     },
     total() {
-      return this.subtotal + 20; // Adding 20 DH for delivery
+      // Calculate total including delivery
+      return this.subtotal + 20;
     },
+  },
+  mounted() {
+    const cartItemsFromStorage = localStorage.getItem("cartItems");
+    if (cartItemsFromStorage) {
+      try {
+        this.cartItems = JSON.parse(cartItemsFromStorage);
+      } catch (error) {
+        console.error("Error parsing cartItems from local storage:", error);
+      }
+    } else {
+      console.error("No cartItems found in local storage");
+    }
   },
   methods: {
     closeCheckoutForm() {
-      this.$emit("close-contact");
+      this.$router.push({
+        name: "Home",
+      });
     },
     submitOrder() {
       // Process the order submission
-      alert("Order submitted!");
-      this.closeCheckoutForm();
-    },
-    loadCart() {
-      this.cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      this.order.products = this.cart;
-    },
+      // alert("Order submitted!");
+      // this.$router.push({
+      //   name: "Home",
+      // });
+      this.submittingOrder = true;
 
-    // async submitOrder() {
-    //   try {
-    //     // await axios.post("http://localhost:8080/api/orders", this.order);
-    //     localStorage.removeItem("cart");
-    //     alert("Commande passée avec succès");
-    //     this.$router.push({ name: "Home" });
-    //   } catch (error) {
-    //     console.error("Erreur lors de la passation de la commande:", error);
-    //   }
-    // },
-  },
-  mounted() {
-    this.loadCart();
+      const totalQuantity = this.cartItems.reduce(
+        (total, item) => total + item.price,
+        0
+      );
+      const orderData = {
+        client: {
+          name: this.order.firstName + " " + this.order.lastName,
+          email: this.order.email,
+          telephone: this.order.phoneNumber,
+        },
+        address: this.order.address,
+        total: totalQuantity,
+        dateCreation: new Date().toISOString(),
+        statut: false,
+        items: this.cartItems.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+        })),
+        // Other properties as needed
+      };
+      OrderService.createOrder(orderData)
+        .then((createdOrder) => {
+          alert("Order submitted successfully!");
+          console.log("Created order:", createdOrder);
+          // Optionally, clear the cartItems and navigate to another route
+        })
+        .catch((error) => {
+          console.error("Error submitting order:", error);
+          alert("Failed to submit order. Please try again later.");
+        });
+    },
   },
 };
 </script>

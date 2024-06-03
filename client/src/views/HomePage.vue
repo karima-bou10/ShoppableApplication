@@ -36,8 +36,7 @@ import HotspotImage from "@/components/HotspotsModal.vue";
 import CollectionService from "@/services/collection.service";
 import CheckoutOrder from "@/components/CheckoutOrder.vue";
 import ProductService from "@/services/product.service";
-import img from "@/assets/desk.jpg";
-import ProductService from "@/services/product.service";
+import img from "@/assets/vase.png";
 
 export default {
   components: {
@@ -122,6 +121,7 @@ export default {
       this.isCartVisible = false;
     },
     toggleContact() {
+      console.log("finalizeOrder home ");
       this.showCheckoutForm = true;
     },
     closeContact() {

@@ -28,43 +28,41 @@
       </div>
     </div>
     <div class="grow overflow-y-scroll">
-      <div v-for="item in cartItems" :key="item.id" class="flex flex-col mb-9">
+      <div
+        v-for="item in basketItems"
+        :key="item.id"
+        class="flex flex-col mb-9"
+      >
         <div class="flex">
           <div class="image m-0.5">
             <img :src="item.image" :alt="item.name" />
           </div>
           <div class="flex flex-col p-0.5">
             <p class="text-base font-medium p-0.5">{{ item.name }}</p>
-            <p class="text-sm p-0.5">{{ item.description }}</p>
             <p class="text-base font-semibold p-0.5">{{ item.price }} DH</p>
             <div class="flex mt-2">
               <div
                 class="grid grid-cols-3 gap-0 bg-slate-200 w-24 rounded-md p-0.5"
               >
                 <div class="text-center cursor-pointer">
-                  <button @click="decreaseQuantity(item)">-</button>
+                  <button @click="decreaseQuantity(item.id)">-</button>
                 </div>
                 <div class="text-center">
                   <span>{{ item.quantity }}</span>
                 </div>
                 <div class="text-center cursor-pointer">
-                  <button @click="increaseQuantity(item)">+</button>
+                  <button @click="increaseQuantity(item.id)">+</button>
                 </div>
               </div>
               <div class="ml-4">
-                <p class="underline decoration-green-950 text-base">Retirer</p>
+                <p
+                  class="underline decoration-green-950 text-base cursor-pointer"
+                  @click="removeItem(item)"
+                >
+                  Retirer
+                </p>
               </div>
             </div>
-    <div class="cart-content">
-      <div v-for="item in basketItems" :key="item.id" class="cart-item">
-        <img :src="item.image" :alt="item.name" />
-        <div>
-          <h4>{{ item.name }}</h4>
-          <p>{{ item.price }} DH</p>
-          <div class="quantity">
-            <button @click="decreaseQuantity(item.id)">-</button>
-            <span>{{ item.quantity }}</span>
-            <button @click="increaseQuantity(item.id)">+</button>
           </div>
         </div>
       </div>
@@ -82,6 +80,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -90,9 +89,6 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
-  computed: {
-    ...mapGetters(["basketItems", "cartSubtotal"]),
   },
   data() {
     return {};
@@ -103,24 +99,32 @@ export default {
       this.$emit("close-cart");
     },
     finalizeOrder() {
-      this.$emit("toggle-contact");
+      console.log("finalizeOrder");
+      localStorage.setItem("cartItems", JSON.stringify(this.basketItems));
+      this.$router.push({
+        name: "Checkout",
+      });
     },
-    increaseQuantity(item) {
-      item.quantity++;
-    },
-    decreaseQuantity(item) {
-      if (item.quantity > 1) {
-        item.quantity--;
+    removeItem(item) {
+      // Find the index of the item in the cartItems array
+      const index = this.basketItems.findIndex(
+        (cartItem) => cartItem.id === item.id
+      );
+
+      // Check if the item is found in the cartItems array
+      if (index !== -1) {
+        // Remove the item from the cartItems array
+        this.basketItems.splice(index, 1);
+
+        // Update local storage with the modified cartItems array
+        localStorage.setItem("cartItems", JSON.stringify(this.basketItems));
+      } else {
+        console.error("Item not found in cartItems array");
       }
     },
   },
   computed: {
-    cartSubtotal() {
-      return this.cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-    },
+    ...mapGetters(["basketItems", "cartSubtotal"]),
   },
 };
 </script>
